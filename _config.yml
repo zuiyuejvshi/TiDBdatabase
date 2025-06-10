@@ -1,0 +1,25 @@
+title: 外贸发货看板
+description: 便捷高效的国际物流追踪系统
+
+# 关键配置
+url: "https://knight-123123.github.io"
+baseurl: "/shipment-dashboard"
+
+# SCSS配置
+sass:
+  sass_dir: _sass
+  style: compressed
+
+plugins:
+  - jekyll-sass-converter
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

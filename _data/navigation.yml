@@ -1,0 +1,13 @@
+# _data/navigation.yml
+- name: 首页
+  link: /
+- name: 关于
+  link: /about.html
+- name: 订单查询
+  link: /query.html
+- name: 运单列表
+  link: /shipments.html
+- name: 添加运单
+  link: /add_shipment.html
+- name: 团队
+  link: /staff.html

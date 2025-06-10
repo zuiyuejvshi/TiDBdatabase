@@ -1,0 +1,64 @@
+---
+layout: default
+title: 我们的团队
+---
+
+<div class="team-container">
+  <div class="team-header">
+    <h1>我们的开发团队</h1>
+    <p class="subtitle">认识推动发货看板系统背后的专业人员</p>
+    <div class="divider"></div>
+  </div>
+  
+  <div class="team-members">
+    {% for member in site.data.team %}
+      <div class="team-card">
+        <div class="member-avatar" style="background-image: url('{{ member.avatar | default: "/assets/images/default-avatar.png" | relative_url }}')"></div>
+        <div class="member-info">
+          <h2>{{ member.name }}</h2>
+          <h3>{{ member.position }}</h3>
+          <p>{{ member.description }}</p>
+          <div class="member-contact">
+            <a href="mailto:{{ member.email }}" class="email-link">{{ member.email }}</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  
+  <div class="team-values">
+    <h2>我们的价值观</h2>
+    
+    <div class="values-grid">
+      <div class="value-item">
+        <div class="value-icon">🚀</div>
+        <h3>创新</h3>
+        <p>我们不断探索新技术和方法，为客户提供最先进的物流解决方案。</p>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">🤝</div>
+        <h3>协作</h3>
+        <p>我们相信团队合作的力量，共同努力创造超越个人能力的成果。</p>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">💯</div>
+        <h3>卓越</h3>
+        <p>我们追求卓越品质，为客户提供最优质的服务体验。</p>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">🔍</div>
+        <h3>透明</h3>
+        <p>我们注重清晰透明的沟通，让客户随时了解货物状态。</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="join-team">
+    <h2>加入我们</h2>
+    <p>我们始终在寻找优秀的人才加入团队。如果您热爱技术创新和国际物流，欢迎与我们联系！</p>
+    <a href="mailto:hr@shipment-dashboard.com" class="btn-join">发送简历</a>
+  </div>
+</div>

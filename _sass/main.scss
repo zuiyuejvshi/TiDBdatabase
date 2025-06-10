@@ -1,0 +1,26 @@
+// Global styles
+html, body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+// Import all page-specific styles
+@import 
+  "navigation",
+  "home",
+  "about",
+  "shipments",
+  "shipment-detail",
+  "add-shipment",
+  "team";
+
+// Current navigation item styling
+.current {
+  color: #2a7de1;
+  font-weight: bold;
+  border-bottom: 2px solid #2a7de1;
+}

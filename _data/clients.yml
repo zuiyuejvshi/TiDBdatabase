@@ -1,0 +1,21 @@
+# _data/clients.yml
+- code: NTS-2304
+  name: Ruixin
+  timezone_offset: +3
+  language: ar
+  country: SA
+  contact: "+966 551234567"
+
+- code: ABC-1234
+  name: TechGlobal
+  timezone_offset: +1
+  language: en
+  country: UK
+  contact: "+44 7712345678"
+
+- code: XYZ-5678
+  name: EuroTrade
+  timezone_offset: +2
+  language: de
+  country: DE
+  contact: "+49 1761234567"

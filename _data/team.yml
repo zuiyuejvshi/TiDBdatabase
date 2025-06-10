@@ -1,0 +1,43 @@
+# _data/team.yml
+- name: 周洲有
+  position: 项目负责人
+  avatar: /assets/images/zzy.jpg
+  description: 拥有10年国际贸易经验，负责整体项目规划和客户关系管理。
+  email: 312847325@qq.com
+
+- name: 马瑞贤
+  position: UI/UX设计师
+  avatar: /assets/images/Mikun.webp
+  description: 拥有丰富的用户界面和用户体验设计经验，专注于创造直观、美观的界面设计。
+  email: 3035615685@qq.com
+
+- name: 谢东廷
+  position: 全栈开发工程师
+  avatar: /assets/images/xdt.jpg
+  description: 精通HTML、CSS和JavaScript，负责系统界面设计和用户体验优化。
+  email: 1670829233@qq.com
+
+- name: 罗凯
+  position: 后端开发工程师
+  avatar: /assets/images/LLK.jpg
+  description: Ruby和数据库专家，负责系统核心功能开发和数据处理。
+  email: 126@lk.com
+
+- name: 杨信
+  position: 物流顾问
+  avatar: /assets/images/yx.jpg
+  description: 国际物流专家，为系统提供专业的物流流程和状态追踪建议。
+  email: 2077199050@qq.com
+
+- name: 冯涛
+  position: 数据分析师
+  avatar: /assets/images/fengtao.png
+  description: 专注于物流数据分析和可视化，为管理层提供数据驱动的决策支持。
+  email: fengnofen@foxmail.com
+
+- name: 白凯源
+  position: 客户服务专员
+  avatar: /assets/images/bky.webp
+  description: 负责与国际客户沟通，解决使用过程中的问题，收集用户反馈并提供支持。
+  email: 184525578@qq.com
+  

@@ -1,0 +1,786 @@
+---
+layout: default
+title: 订单查询
+---
+
+<div class="query-page">
+  <div class="query-header">
+    <h1>订单查询 / Order Query</h1>
+    <p class="subtitle">请输入运单号或客户代码查询您的订单信息</p>
+    <div class="divider"></div>
+  </div>
+  
+  <div class="query-container">
+    <div class="query-form-section">
+      <div class="query-methods">
+        <div class="method-tabs">
+          <button class="tab-btn active" onclick="switchTab('tracking')">
+            <span class="tab-icon">🔍</span>
+            运单号查询 / Tracking Number
+          </button>
+          <button class="tab-btn" onclick="switchTab('client')">
+            <span class="tab-icon">👤</span>
+            客户代码查询 / Client Code
+          </button>
+        </div>
+        
+        <!-- 运单号查询 -->
+        <div id="trackingQuery" class="query-form active">
+          <div class="form-group">
+            <label for="trackingNumber">运单号 / Tracking Number</label>
+            <input type="text" id="trackingNumber" placeholder="例如: NTS-2304_ELECT_50_20250507T093000" />
+            <small>请输入完整的运单号</small>
+          </div>
+          <button class="btn-query" onclick="queryByTracking()">
+            <span class="btn-icon">🔍</span>
+            查询订单 / Search Order
+          </button>
+        </div>
+        
+        <!-- 客户代码查询 -->
+        <div id="clientQuery" class="query-form">
+          <div class="form-group">
+            <label for="clientCode">客户代码 / Client Code</label>
+            <input type="text" id="clientCode" placeholder="例如: NTS-2304" />
+            <small>请输入您的客户代码</small>
+          </div>
+          <button class="btn-query" onclick="queryByClient()">
+            <span class="btn-icon">🔍</span>
+            查询所有订单 / Search All Orders
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 查询结果区域 -->
+    <div id="queryResults" class="query-results" style="display: none;">
+      <div class="results-header">
+        <h2>查询结果 / Query Results</h2>
+        <button class="btn-clear" onclick="clearResults()">清空结果 / Clear</button>
+      </div>
+      <div id="resultsContent" class="results-content">
+        <!-- 查询结果将在这里显示 -->
+      </div>
+    </div>
+    
+    <!-- 无结果提示 -->
+    <div id="noResults" class="no-results" style="display: none;">
+      <div class="no-results-icon">📦</div>
+      <h3>未找到相关订单 / No Orders Found</h3>
+      <p>请检查您的输入信息是否正确，或联系客服获取帮助。</p>
+      <div class="help-actions">
+        <a href="{{ '/shipments.html' | relative_url }}" class="btn-secondary">查看所有运单 / View All Shipments</a>
+        <a href="#contact" class="btn-contact" onclick="showContact()">联系客服 / Contact Support</a>
+      </div>
+    </div>
+    
+    <!-- 加载状态 -->
+    <div id="loadingState" class="loading-state" style="display: none;">
+      <div class="spinner"></div>
+      <p>正在查询中... / Searching...</p>
+    </div>
+  </div>
+  
+  <!-- 联系客服模态框 -->
+  <div id="contactModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>联系客服 / Contact Support</h3>
+        <button class="modal-close" onclick="hideContact()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="contact-methods">
+          <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <div class="contact-info">
+              <strong>客服热线 / Hotline</strong>
+              <p>+86 123 4567 8910</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div class="contact-info">
+              <strong>邮箱支持 / Email</strong>
+              <p>support@shipment-dashboard.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <div class="contact-info">
+              <strong>在线客服 / Live Chat</strong>
+              <p>工作时间: 9:00-18:00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.query-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.query-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.query-header h1 {
+  color: #2a7de1;
+  font-size: 2.2em;
+  margin-bottom: 10px;
+}
+
+.query-header .subtitle {
+  color: #666;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+.query-header .divider {
+  height: 3px;
+  width: 80px;
+  background-color: #2a7de1;
+  margin: 0 auto;
+}
+
+.query-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.query-form-section {
+  padding: 30px;
+  border-bottom: 1px solid #eee;
+}
+
+.method-tabs {
+  display: flex;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tab-btn:hover {
+  color: #2a7de1;
+  background-color: #f8f9fa;
+}
+
+.tab-btn.active {
+  color: #2a7de1;
+  border-bottom-color: #2a7de1;
+  background-color: #f8f9fa;
+}
+
+.tab-icon {
+  font-size: 1.2em;
+}
+
+.query-form {
+  display: none;
+}
+
+.query-form.active {
+  display: block;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2a7de1;
+  box-shadow: 0 0 0 3px rgba(42, 125, 225, 0.1);
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-size: 14px;
+}
+
+.btn-query {
+  width: 100%;
+  padding: 15px 25px;
+  background: linear-gradient(135deg, #2a7de1, #1a68c9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-query:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(42, 125, 225, 0.3);
+}
+
+.btn-icon {
+  font-size: 1.1em;
+}
+
+.query-results {
+  padding: 30px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.results-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.btn-clear {
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+  background-color: #e9ecef;
+}
+
+.results-content {
+  display: grid;
+  gap: 20px;
+}
+
+.result-card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.result-card:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.result-header h3 {
+  margin: 0;
+  color: #2a7de1;
+  font-size: 1.1em;
+}
+
+.status-badge {
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status-未发货 { background-color: #fff9c4; color: #8d6e00; }
+.status-已发货 { background-color: #bbdefb; color: #0d47a1; }
+.status-已到达 { background-color: #c8e6c9; color: #1b5e20; }
+.status-已提货 { background-color: #d7ccc8; color: #3e2723; }
+
+.result-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.detail-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 30px;
+  color: #666;
+}
+
+.no-results-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.no-results h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.help-actions {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-secondary, .btn-contact {
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-contact {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover, .btn-contact:hover {
+  transform: translateY(-2px);
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 30px;
+  color: #666;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2a7de1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 25px;
+}
+
+.contact-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.contact-icon {
+  font-size: 1.5em;
+  width: 40px;
+  text-align: center;
+}
+
+.contact-info strong {
+  display: block;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.contact-info p {
+  margin: 0;
+  color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .method-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-btn {
+    border-bottom: 1px solid #eee;
+    border-right: none;
+  }
+  
+  .tab-btn.active {
+    border-bottom-color: #eee;
+    border-left: 3px solid #2a7de1;
+  }
+  
+  .results-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .result-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .help-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
+
+<script>
+// 模拟数据 - 在实际应用中，这些数据将从服务器获取
+const shipments = [
+  {
+    tracking_number: "NTS-2304_ELECT_50_20250507T093000",
+    client_code: "NTS-2304",
+    client_name: "Ruixin",
+    transport_mode: "Sea",
+    status: "已发货",
+    goods_description: "Electronic components, model XC-2304",
+    package_count: 50,
+    created_at: "2025-05-07T09:30:00",
+    shipped_date: "2025-05-08",
+    estimated_arrival: "2025-06-07"
+  },
+  {
+    tracking_number: "ABC-1234_TECH_25_20250505T143000",
+    client_code: "ABC-1234",
+    client_name: "TechGlobal",
+    transport_mode: "Air",
+    status: "未发货",
+    goods_description: "Computer peripherals",
+    package_count: 25,
+    created_at: "2025-05-05T14:30:00",
+    estimated_arrival: "2025-05-12"
+  },
+  {
+    tracking_number: "XYZ-5678_FURN_10_20250502T110000",
+    client_code: "XYZ-5678",
+    client_name: "EuroTrade",
+    transport_mode: "Sea",
+    status: "已到达",
+    goods_description: "Office furniture",
+    package_count: 10,
+    created_at: "2025-05-02T11:00:00",
+    shipped_date: "2025-05-03",
+    estimated_arrival: "2025-05-28",
+    arrival_date: "2025-05-28"
+  },
+  {
+    tracking_number: "NTS-2304_CLOTH_30_20250420T082000",
+    client_code: "NTS-2304",
+    client_name: "Ruixin",
+    transport_mode: "Sea",
+    status: "已提货",
+    goods_description: "Textile products, winter collection",
+    package_count: 30,
+    created_at: "2025-04-20T08:20:00",
+    shipped_date: "2025-04-21",
+    estimated_arrival: "2025-05-21",
+    arrival_date: "2025-05-20",
+    pickup_date: "2025-05-22"
+  }
+];
+
+function switchTab(tabType) {
+  // 切换tab按钮状态
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.tab-btn').classList.add('active');
+  
+  // 切换表单显示
+  document.querySelectorAll('.query-form').forEach(form => form.classList.remove('active'));
+  document.getElementById(tabType + 'Query').classList.add('active');
+  
+  // 清空结果
+  clearResults();
+}
+
+function showLoading() {
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('queryResults').style.display = 'none';
+  document.getElementById('noResults').style.display = 'none';
+}
+
+function hideLoading() {
+  document.getElementById('loadingState').style.display = 'none';
+}
+
+function queryByTracking() {
+  const trackingNumber = document.getElementById('trackingNumber').value.trim();
+  
+  if (!trackingNumber) {
+    alert('请输入运单号 / Please enter tracking number');
+    return;
+  }
+  
+  showLoading();
+  
+  // 模拟API调用延迟
+  setTimeout(() => {
+    const result = shipments.find(s => s.tracking_number === trackingNumber);
+    hideLoading();
+    
+    if (result) {
+      displayResults([result]);
+    } else {
+      showNoResults();
+    }
+  }, 1000);
+}
+
+function queryByClient() {
+  const clientCode = document.getElementById('clientCode').value.trim();
+  
+  if (!clientCode) {
+    alert('请输入客户代码 / Please enter client code');
+    return;
+  }
+  
+  showLoading();
+  
+  // 模拟API调用延迟
+  setTimeout(() => {
+    const results = shipments.filter(s => s.client_code.toLowerCase() === clientCode.toLowerCase());
+    hideLoading();
+    
+    if (results.length > 0) {
+      displayResults(results);
+    } else {
+      showNoResults();
+    }
+  }, 1000);
+}
+
+function displayResults(results) {
+  const resultsContent = document.getElementById('resultsContent');
+  
+  resultsContent.innerHTML = results.map(shipment => `
+    <div class="result-card" onclick="viewDetails('${shipment.tracking_number}')">
+      <div class="result-header">
+        <h3>${shipment.tracking_number}</h3>
+        <span class="status-badge status-${shipment.status}">
+          ${getStatusText(shipment.status)}
+        </span>
+      </div>
+      <div class="result-details">
+        <div class="detail-item">
+          <span class="detail-label">客户 / Client</span>
+          <span class="detail-value">${shipment.client_name} (${shipment.client_code})</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">运输方式 / Transport</span>
+          <span class="detail-value">${shipment.transport_mode}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">包裹数量 / Packages</span>
+          <span class="detail-value">${shipment.package_count}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">创建时间 / Created</span>
+          <span class="detail-value">${formatDate(shipment.created_at)}</span>
+        </div>
+        ${shipment.shipped_date ? `
+        <div class="detail-item">
+          <span class="detail-label">发货日期 / Shipped</span>
+          <span class="detail-value">${formatDate(shipment.shipped_date)}</span>
+        </div>
+        ` : ''}
+        <div class="detail-item">
+          <span class="detail-label">预计到达 / Est. Arrival</span>
+          <span class="detail-value">${formatDate(shipment.estimated_arrival)}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  
+  document.getElementById('queryResults').style.display = 'block';
+  document.getElementById('noResults').style.display = 'none';
+}
+
+function showNoResults() {
+  document.getElementById('queryResults').style.display = 'none';
+  document.getElementById('noResults').style.display = 'block';
+}
+
+function clearResults() {
+  document.getElementById('queryResults').style.display = 'none';
+  document.getElementById('noResults').style.display = 'none';
+  document.getElementById('trackingNumber').value = '';
+  document.getElementById('clientCode').value = '';
+}
+
+function viewDetails(trackingNumber) {
+  window.location.href = `/shipment_detail.html?tracking=${trackingNumber}`;
+}
+
+function getStatusText(status) {
+  const statusMap = {
+    '未发货': '🟡 等待发货',
+    '已发货': '🚢 运输中',
+    '已到达': '✅ 已到达',
+    '已提货': '📦 已提货'
+  };
+  return statusMap[status] || status;
+}
+
+function formatDate(dateString) {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('zh-CN').replace(/\//g, '年').replace(/\//g, '月') + '日';
+}
+
+function showContact() {
+  document.getElementById('contactModal').style.display = 'flex';
+}
+
+function hideContact() {
+  document.getElementById('contactModal').style.display = 'none';
+}
+
+// 按回车键搜索
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('trackingNumber').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      queryByTracking();
+    }
+  });
+  
+  document.getElementById('clientCode').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      queryByClient();
+    }
+  });
+  
+  // 点击模态框外部关闭
+  document.getElementById('contactModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      hideContact();
+    }
+  });
+});
+</script>

@@ -1,0 +1,39 @@
+---
+layout: default
+title: 运单列表
+---
+
+<div class="shipments">
+  <h1>运单列表</h1>
+  
+  <div class="shipments-list" id="shipmentsList">
+    <!-- 数据将通过 JavaScript 动态加载 -->
+  </div>
+</div>
+
+<script>
+async function loadShipments() {
+  try {
+    const response = await fetch('/api/shipments');
+    const shipments = await response.json();
+    const shipmentsList = document.getElementById('shipmentsList');
+    
+    shipmentsList.innerHTML = shipments.map(shipment => `
+      <div class="shipment-item">
+        <h3>运单号: ${shipment.tracking_number}</h3>
+        <p>客户代码: ${shipment.client_code}</p>
+        <p>运输方式: ${shipment.transport_mode}</p>
+        <p>状态: ${shipment.status}</p>
+        <p>货物描述: ${shipment.goods_description}</p>
+        <p>包裹数量: ${shipment.package_count}</p>
+        <p>预计天数: ${shipment.estimated_days}</p>
+        <a href="/shipment_detail.html?id=${shipment.id}">查看详情</a>
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error('Error loading shipments:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadShipments);
+</script>

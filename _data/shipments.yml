@@ -1,0 +1,47 @@
+# _data/shipments.yml
+- tracking_number: NTS-2304_ELECT_50_20250507T093000
+  client_code: NTS-2304
+  transport_mode: Sea
+  status: 已发货
+  goods_description: Electronic components, model XC-2304
+  package_count: 50
+  estimated_days: 30
+  created_at: 2025-05-07T09:30:00
+  shipped_date: 2025-05-08
+  estimated_arrival: 2025-06-07
+
+- tracking_number: ABC-1234_TECH_25_20250505T143000
+  client_code: ABC-1234
+  transport_mode: Air
+  status: 未发货
+  goods_description: Computer peripherals
+  package_count: 25
+  estimated_days: 7
+  created_at: 2025-05-05T14:30:00
+  shipped_date: 
+  estimated_arrival: 2025-05-12
+
+- tracking_number: XYZ-5678_FURN_10_20250502T110000
+  client_code: XYZ-5678
+  transport_mode: Sea
+  status: 已到达
+  goods_description: Office furniture
+  package_count: 10
+  estimated_days: 25
+  created_at: 2025-05-02T11:00:00
+  shipped_date: 2025-05-03
+  estimated_arrival: 2025-05-28
+  arrival_date: 2025-05-28
+
+- tracking_number: NTS-2304_CLOTH_30_20250420T082000
+  client_code: NTS-2304
+  transport_mode: Sea
+  status: 已提货
+  goods_description: Textile products, winter collection
+  package_count: 30
+  estimated_days: 30
+  created_at: 2025-04-20T08:20:00
+  shipped_date: 2025-04-21
+  estimated_arrival: 2025-05-21
+  arrival_date: 2025-05-20
+  pickup_date: 2025-05-22

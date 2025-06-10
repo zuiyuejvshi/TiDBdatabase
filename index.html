@@ -1,0 +1,102 @@
+---
+layout: default
+title: 外贸发货看板
+---
+
+<div class="home-container">
+  <div class="home-header">
+    <h1>外贸发货看板</h1>
+    <h2>International Shipping Dashboard</h2>
+    <p class="subtitle">便捷高效的国际物流追踪系统</p>
+  </div>
+  
+  <div class="dashboard-summary">
+    {% assign pending_shipments = site.data.shipments | where: "status", "未发货" %}
+    {% assign shipped_shipments = site.data.shipments | where: "status", "已发货" %}
+    {% assign arrived_shipments = site.data.shipments | where: "status", "已到达" %}
+    {% assign picked_shipments = site.data.shipments | where: "status", "已提货" %}
+    
+    <div class="status-box pending">
+      <div class="status-icon">🟡</div>
+      <div class="status-info">
+        <h3>未发货</h3>
+        <p>Pending</p>
+        <div class="status-count">{{ pending_shipments.size }}</div>
+      </div>
+    </div>
+    
+    <div class="status-box shipped">
+      <div class="status-icon">🚢</div>
+      <div class="status-info">
+        <h3>已发货</h3>
+        <p>Shipped</p>
+        <div class="status-count">{{ shipped_shipments.size }}</div>
+      </div>
+    </div>
+    
+    <div class="status-box arrived">
+      <div class="status-icon">✅</div>
+      <div class="status-info">
+        <h3>已到达</h3>
+        <p>Arrived</p>
+        <div class="status-count">{{ arrived_shipments.size }}</div>
+      </div>
+    </div>
+    
+    <div class="status-box picked">
+      <div class="status-icon">📦</div>
+      <div class="status-info">
+        <h3>已提货</h3>
+        <p>Picked Up</p>
+        <div class="status-count">{{ picked_shipments.size }}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-actions">
+    <a href="{{ '/shipments.html' | relative_url }}" class="btn btn-primary">查看所有运单</a>
+    <a href="{{ '/add_shipment.html' | relative_url }}" class="btn btn-secondary">添加新运单</a>
+  </div>
+  
+  <div class="recent-shipments">
+    <h2>最近发货 / Recent Shipments</h2>
+    <div class="shipment-cards">
+      {% assign recent_shipments = site.data.shipments | sort: 'created_at' | reverse | limit: 3 %}
+      {% for shipment in recent_shipments %}
+        {% assign client = site.data.clients | where: "code", shipment.client_code | first %}
+        <div class="shipment-card status-{{ shipment.status }}">
+          <div class="shipment-header">
+            <h3><a href="{{ '/shipment_detail.html' | relative_url }}?tracking={{ shipment.tracking_number }}">{{ shipment.tracking_number }}</a></h3>
+            <div class="status-badge">
+              {% case shipment.status %}
+                {% when '未发货' %} 🟡 等待发货
+                {% when '已发货' %} 🚢 运输中
+                {% when '已到达' %} ✅ 抵达目的港
+                {% when '已提货' %} 📦 已提货
+              {% endcase %}
+            </div>
+          </div>
+          <div class="shipment-details">
+            <div class="detail-row">
+              <span class="label">客户 / Client:</span>
+              <span class="value">{{ client.name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">创建时间 / Created:</span>
+              <span class="value">{{ shipment.created_at | date: "%Y年%m月%d日" }}</span>
+            </div>
+            {% if shipment.shipped_date %}
+            <div class="detail-row">
+              <span class="label">发货日期 / Shipped:</span>
+              <span class="value">{{ shipment.shipped_date | date: "%Y年%m月%d日" }}</span>
+            </div>
+            {% endif %}
+          </div>
+          <div class="card-action">
+            <a href="{{ '/shipment_detail.html' | relative_url }}?tracking={{ shipment.tracking_number }}">查看详情 &raquo;</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

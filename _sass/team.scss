@@ -1,0 +1,224 @@
+// Team page styling
+.team-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.team-header {
+  text-align: center;
+  margin-bottom: 50px;
+  
+  h1 {
+    color: #2a7de1;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    color: #666;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  .divider {
+    height: 3px;
+    width: 80px;
+    background-color: #2a7de1;
+    margin: 0 auto;
+  }
+}
+
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));  // 可能需要调整宽度
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.team-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  
+  .member-avatar {
+    width: 180px;
+    background-size: cover;
+    background-position: center;
+    background-color: #f0f0f0;
+  }
+  
+  .member-info {
+    flex: 1;
+    padding: 20px;
+    
+    h2 {
+      margin: 0 0 5px 0;
+      color: #333;
+      font-size: 1.4em;
+    }
+    
+    h3 {
+      margin: 0 0 15px 0;
+      color: #2a7de1;
+      font-size: 1em;
+      font-weight: normal;
+    }
+    
+    p {
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .member-contact {
+      .email-link {
+        color: #2a7de1;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        
+        &:before {
+          content: '✉️';
+          margin-right: 5px;
+        }
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.team-values {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 30px;
+  margin-bottom: 60px;
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 30px;
+    position: relative;
+    
+    &:after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: #2a7de1;
+      margin: 10px auto 0;
+    }
+  }
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 25px;
+}
+
+.value-item {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+  
+  .value-icon {
+    font-size: 2em;
+    margin-bottom: 15px;
+  }
+  
+  h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+  }
+  
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.6;
+  }
+}
+
+.join-team {
+  text-align: center;
+  padding: 40px;
+  background-color: #f5f7fa;
+  border-radius: 10px;
+  
+  h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    color: #555;
+    margin-bottom: 25px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .btn-join {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #2a7de1;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: #1a68c9;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .team-members {
+    grid-template-columns: 1fr;
+  }
+  
+  .team-card {
+    flex-direction: column;
+    
+    .member-avatar {
+      width: 100%;
+      height: 200px;
+    }
+  }
+  
+  .values-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+}

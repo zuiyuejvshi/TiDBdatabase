@@ -1,0 +1,114 @@
+---
+layout: default
+title: 添加运单
+---
+
+<div class="add-shipment-page">
+  <h1>添加新运单 / Add New Shipment</h1>
+  
+  <div class="form-container">
+    <form id="shipmentForm" onsubmit="return handleSubmit(event)">
+      <div class="form-section">
+        <h2>客户信息 / Client Information</h2>
+        
+        <div class="form-group">
+          <label for="client_code">客户代码 / Client Code *</label>
+          <select id="client_code" name="client_code" required>
+            <option value="">-- 选择客户 / Select Client --</option>
+            {% for client in site.data.clients %}
+            <option value="{{ client.code }}">{{ client.code }} - {{ client.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h2>运单信息 / Shipment Information</h2>
+        
+        <div class="form-group">
+          <label for="goods_short_name">货物简称 / Goods Short Name *</label>
+          <input type="text" id="goods_short_name" name="goods_short_name" maxlength="16" placeholder="例如: ELECT" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="goods_description">货物描述 / Goods Description *</label>
+          <textarea id="goods_description" name="goods_description" rows="3" placeholder="例如: Electronic components, model XC-2304" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="package_count">包裹数量 / Package Count *</label>
+          <input type="number" id="package_count" name="package_count" min="1" value="1" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="transport_mode">运输方式 / Transport Mode *</label>
+          <select id="transport_mode" name="transport_mode" required>
+            <option value="">-- 选择运输方式 / Select Transport Mode --</option>
+            <option value="Sea">海运 / Sea</option>
+            <option value="Air">空运 / Air</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="estimated_days">预计运输天数 / Estimated Days *</label>
+          <input type="number" id="estimated_days" name="estimated_days" min="1" value="30" required>
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">提交 / Submit</button>
+        <a href="{{ '/shipments.html' | relative_url }}" class="btn-cancel">取消 / Cancel</a>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Success Modal -->
+  <div id="successModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h2>✅ 成功 / Success</h2>
+      <p>运单已创建 / Shipment has been created</p>
+      <p>运单号 / Tracking Number: <strong id="trackingNumber"></strong></p>
+      <div class="modal-actions">
+        <a href="{{ '/shipments.html' | relative_url }}" class="btn-primary">查看所有运单 / View All Shipments</a>
+        <a href="#" id="viewShipmentLink" class="btn-secondary">查看此运单 / View This Shipment</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function handleSubmit(event) {
+    event.preventDefault();
+    
+    // Get form values
+    const clientCode = document.getElementById('client_code').value;
+    const goodsShortName = document.getElementById('goods_short_name').value.toUpperCase();
+    const goodsDescription = document.getElementById('goods_description').value;
+    const packageCount = document.getElementById('package_count').value;
+    const transportMode = document.getElementById('transport_mode').value;
+    const estimatedDays = document.getElementById('estimated_days').value;
+    
+    // Generate timestamp (format: YYYYMMDDTHHMMSS)
+    const now = new Date();
+    const timestamp = now.getFullYear() +
+      ('0' + (now.getMonth() + 1)).slice(-2) +
+      ('0' + now.getDate()).slice(-2) + 'T' +
+      ('0' + now.getHours()).slice(-2) +
+      ('0' + now.getMinutes()).slice(-2) +
+      ('0' + now.getSeconds()).slice(-2);
+    
+    // Generate tracking number
+    const trackingNumber = `${clientCode}_${goodsShortName}_${packageCount}_${timestamp}`;
+    
+    // In a real application, this would save the data to the server
+    // For this demo, just show the success modal
+    document.getElementById('trackingNumber').textContent = trackingNumber;
+    document.getElementById('viewShipmentLink').href = `/shipment_detail.html?tracking=${trackingNumber}`;
+    document.getElementById('successModal').style.display = 'flex';
+    
+    // In a real application with server-side processing, you would send the form data
+    // to the server and then redirect the user to the shipment detail page
+    
+    return false;
+  }
+</script>
