@@ -2,8 +2,8 @@ title: 外贸发货看板
 description: 便捷高效的国际物流追踪系统
 
 # 关键配置
-url: "https://knight-123123.github.io"
-baseurl: "/shipment-dashboard"
+url: ""  # 删除 GitHub Pages 的 URL
+baseurl: ""  # 删除 baseurl
 
 # SCSS配置
 sass:
